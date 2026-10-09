@@ -22,8 +22,7 @@ class Binomial:
             mean = sum(data) / len(data)
             variance = sum((x - mean) ** 2 for x in data) / len(data)
             p_calc = 1 - (variance / mean)
-            n_calc = round(mean / p_calc)
-            self.n = n_calc
+            self.n = round(mean / p_calc)
             self.p = mean / self.n
 
     def pmf(self, k):
@@ -31,14 +30,16 @@ class Binomial:
         k = int(k)
         if k < 0 or k > self.n:
             return 0
-
-        def factorial(num):
-            fact = 1
-            for i in range(1, num + 1):
-                fact *= i
-            return fact
-
-        comb = factorial(self.n) / (factorial(k) * factorial(self.n - k))
+        fact_n = 1
+        for i in range(1, self.n + 1):
+            fact_n *= i
+        fact_k = 1
+        for i in range(1, k + 1):
+            fact_k *= i
+        fact_nk = 1
+        for i in range(1, self.n - k + 1):
+            fact_nk *= i
+        comb = fact_n / (fact_k * fact_nk)
         return comb * (self.p ** k) * ((1 - self.p) ** (self.n - k))
 
     def cdf(self, k):
