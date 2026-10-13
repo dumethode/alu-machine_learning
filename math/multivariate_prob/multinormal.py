@@ -27,13 +27,9 @@ class MultiNormal:
             raise ValueError("x must have the shape ({}, 1)".format(d))
 
         diff = x - self.mean
-        sign, logdet = np.linalg.slogdet(self.cov)
+        det_cov = np.linalg.det(self.cov)
         inv_cov = np.linalg.inv(self.cov)
-        
-        mah_dist = np.matmul(np.matmul(diff.T, inv_cov), diff)
-        
-        # Using log space calculation for numerical stability and exact precision match
-        exponent = -0.5 * mah_dist
-        norm_const = -(d / 2) * np.log(2 * np.pi) - 0.5 * logdet
-        
-        return float(np.exp(norm_const + exponent))
+
+        exponent = -0.5 * np.matmul(np.matmul(diff.T, inv_cov), diff)
+        norm_factor = 1.0 / np.sqrt(((2 * np.pi) ** d) * det_cov)
+        return float(norm_factor * np.exp(exponent))
