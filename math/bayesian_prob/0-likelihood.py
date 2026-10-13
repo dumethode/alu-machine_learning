@@ -8,7 +8,8 @@ def likelihood(x, n, P):
     if not isinstance(n, int) or n <= 0:
         raise ValueError("n must be a positive integer")
     if not isinstance(x, int) or x < 0:
-        raise ValueError("x must be an integer that is greater than or equal to 0")
+        err = "x must be an integer that is greater than or equal to 0"
+        raise ValueError(err)
     if x > n:
         raise ValueError("x cannot be greater than n")
     if not isinstance(P, np.ndarray) or P.ndim != 1:
@@ -26,5 +27,5 @@ def likelihood(x, n, P):
     for i in range(1, n - x + 1):
         fact_nx *= i
 
-    comb = fact_n // (fact_x * fact_nx)
+    comb = float(fact_n // (fact_x * fact_nx))
     return comb * (P ** x) * ((1 - P) ** (n - x))
